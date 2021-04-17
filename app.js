@@ -11,7 +11,9 @@ class Calculator {
     this.operation = undefined
   }
 
-  delete() {}
+  delete() {
+    this.currentOperand = this.currentOperand.toString().slice(0, -1)
+  }
 
   appendNumbers(number) {
     if (number === '.' && this.currentOperand.includes('.')) return
@@ -30,8 +32,8 @@ class Calculator {
 
   compute() {
     let output
-    const prev = this.previousOperand
-    const current = this.currentOperand
+    const prev = parseFloat(this.previousOperand)
+    const current = parseFloat(this.currentOperand)
     if (!prev || !current) return
     switch (this.operation) {
       case '+':
@@ -51,11 +53,16 @@ class Calculator {
     }
     this.currentOperand = output
     this.previousOperand = ''
+    this.operation = undefined
   }
 
   updateDisplay() {
     this.currentOperandText.innerText = this.currentOperand
-    this.previousOperandText.innerText = this.previousOperand
+    if (this.operation != null) {
+      this.previousOperandText.innerText = `${this.previousOperand} ${this.operation}`
+    } else {
+      this.previousOperandText.innerText = ''
+    }
   }
 }
 
@@ -90,5 +97,10 @@ allClearButton.addEventListener('click', () => {
 
 equalsButton.addEventListener('click', () => {
   calculator.compute()
+  calculator.updateDisplay()
+})
+
+deleteButton.addEventListener('click', () => {
+  calculator.delete()
   calculator.updateDisplay()
 })
