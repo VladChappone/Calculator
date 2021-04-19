@@ -56,10 +56,37 @@ class Calculator {
     this.operation = undefined
   }
 
+  //function that helps display proper numbers
+  getDisplayNumber(number) {
+    let stringNumber = number.toString()
+    //getting integer
+    let integer = parseFloat(stringNumber.split('.')[0])
+    //getting decimals
+    let decimals = stringNumber.split('.')[1]
+
+    let integerDisplay
+    if (isNaN(integer)) {
+      integerDisplay = ''
+    } else {
+      integerDisplay = integer.toLocaleString('en', {
+        maximumFractionDigits: 0,
+      })
+    }
+    if (decimals != null) {
+      return `${integerDisplay}.${decimals}`
+    } else {
+      return integerDisplay
+    }
+  }
+
   updateDisplay() {
-    this.currentOperandText.innerText = this.currentOperand
+    this.currentOperandText.innerText = this.getDisplayNumber(
+      this.currentOperand
+    )
     if (this.operation != null) {
-      this.previousOperandText.innerText = `${this.previousOperand} ${this.operation}`
+      this.previousOperandText.innerText = `${this.getDisplayNumber(
+        this.previousOperand
+      )} ${this.operation}`
     } else {
       this.previousOperandText.innerText = ''
     }
